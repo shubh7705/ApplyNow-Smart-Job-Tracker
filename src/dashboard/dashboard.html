@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ApplyNow Dashboard</title>
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+  <div class="app">
+    <header class="hero">
+      <div>
+        <p class="tag">ApplyNow</p>
+        <h1>Smart Job Tracker</h1>
+        <p class="subtitle">Organize your pipeline, capture notes, and stay on top of deadlines.</p>
+      </div>
+      <div class="hero-actions">
+        <button id="addJob" class="primary">Add Job</button>
+        <button id="clearAll" class="ghost">Clear All</button>
+      </div>
+    </header>
+
+    <section class="stats" id="stats"></section>
+
+    <section class="controls">
+      <input type="search" id="search" placeholder="Search company, role, notes">
+      <select id="statusFilter">
+        <option value="">All Statuses</option>
+      </select>
+      <select id="sortBy">
+        <option value="createdAt">Newest</option>
+        <option value="deadline">Upcoming deadline</option>
+        <option value="company">Company A-Z</option>
+      </select>
+    </section>
+
+    <section class="content">
+      <div class="list" id="jobList"></div>
+      <div class="details" id="jobDetails">
+        <div class="details-empty">
+          <h3>Select a job</h3>
+          <p>Choose an item to view details, update status, or add notes.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <dialog id="jobDialog">
+    <form method="dialog" id="jobForm">
+      <h2>New Job</h2>
+      <label>
+        Company
+        <input type="text" id="company" required>
+      </label>
+      <label>
+        Role
+        <input type="text" id="role" required>
+      </label>
+      <label>
+        Deadline
+        <input type="date" id="deadline">
+      </label>
+      <label>
+        URL
+        <input type="url" id="url">
+      </label>
+      <div class="dialog-actions">
+        <button value="cancel" class="ghost">Cancel</button>
+        <button id="saveJob" value="default" class="primary" type="submit">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script type="module" src="dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <title>ApplyNow</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+
+<body>
+  <header>
+    <h2>ApplyNow</h2>
+    <button id="openDashboard" class="ghost">Dashboard</button>
+  </header>
+
+  <form id="jobForm">
+    <input type="text" id="company" placeholder="Company" required>
+    <input type="text" id="role" placeholder="Job Role" required>
+    <input type="date" id="deadline">
+    <button type="submit">Add Job</button>
+  </form>
+
+  <div class="section-title">Recent</div>
+  <ul id="jobList"></ul>
+
+  <script type="module" src="popup.js"></script>
+</body>
+</html>
