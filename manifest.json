@@ -3,29 +3,16 @@
   "name": "ApplyNow - Smart Job Tracker",
   "version": "0.2",
   "description": "Track your job applications easily",
-
   "permissions": [
     "storage",
     "activeTab",
     "scripting"
   ],
-
   "background": {
     "service_worker": "src/background/index.js",
     "type": "module"
   },
-
   "action": {
     "default_popup": "src/popup/popup.html"
-  },
-
-  "content_scripts": [
-  {
-    "matches": ["<all_urls>"],
-    "js": ["src/content/inject.js"],
-    "run_at": "document_idle",
-    "type": "module"
   }
-]
-
 }

@@ -3,18 +3,43 @@ import { summarizeJD } from "../ai/summerizer.js";
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   (async () => {
-    if (msg.type === "JOB_DETECTED") {
-      const job = msg.payload;
-      const summary = await summarizeJD(job.description || "");
-      const saved = await upsertJob({
-        ...job,
-        summary: summary.summary,
-        keywords: summary.keywords,
-        status: job.status || "Detected"
-      });
-      sendResponse({ ok: true, job: saved });
+    if (msg.type === "EXTRACT_JOB") {
+
+    const [tab] = await chrome.tabs.query({
+      active: true,
+      currentWindow: true
+    });
+
+    if (!tab.url.includes("linkedin.com") &&
+        !tab.url.includes("indeed.com")) {
+      console.log("Unsupported site");
       return;
     }
+
+    chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      files: ["src/content/inject.js"]
+    });
+  }
+
+   if (msg.type === "JOB_EXTRACTED") {
+    console.log("Job data:", msg.data);
+
+    chrome.storage.local.set({
+      lastExtractedJob: msg.data
+    });
+  }
+
+   if (msg.type === "JOB_DETECTED") {
+  const job = { ...msg.payload, status: "Detected" };
+  saveJob(job).then((saved) => {
+    sendResponse({ ok: true, job: saved });
+
+    // ✅ Notify popup to refresh
+    chrome.runtime.sendMessage({ type: "JOBS_UPDATED" }).catch(() => {});
+  });
+  return true;
+}
 
     if (msg.type === "JOB_SAVE") {
       const saved = await saveJob(msg.payload);
@@ -35,10 +60,11 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     }
 
     if (msg.type === "GET_JOBS") {
-      const jobs = await getJobs();
+    getJobs().then((jobs) => {
       sendResponse({ ok: true, jobs });
-      return;
-    }
+    });
+    return true;
+  }
 
     if (msg.type === "CLEAR_JOBS") {
       await clearJobs();
